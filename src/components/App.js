@@ -1,9 +1,22 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Navbar, NavbarBrand} from 'reactstrap'
 import '../css/App.css';
-import Menu from "./MenuComponent"
+import MenuList from "./MenuList"
+import MenuCards from "./MenuCards"
 
-function App() {
+import {DISHES} from '../shared/dishes'
+
+class App extends Component {
+
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+      dishes: DISHES
+    }
+  }
+  
+  render(){
   return (
     <div className="App">
       <Navbar dark color="primary">
@@ -11,9 +24,12 @@ function App() {
           <NavbarBrand href="/">CodeNinja rocks</NavbarBrand>
         </div>
       </Navbar>
-      <Menu/> 
+      <MenuList dishes={this.state.dishes}/> 
+      <hr/>
+      <MenuCards dishes={this.state.dishes}/>
     </div>
   );
+  }
 }
 
 export default App;
