@@ -3,55 +3,6 @@ import { Card, CardBody, CardText, CardImg, CardTitle, BreadcrumbItem, Breadcrum
 import {Link} from 'react-router-dom'
 import {LocalForm, Control, Errors} from 'react-redux-form'
 
-function renderDish(selectedDish) {
-        
-    if (selectedDish != undefined) {
-        return (
-            <>
-            <div className="col-12 col-md-5 m-1">
-                <Card >
-                    <CardImg src={selectedDish.image} alt={selectedDish.name} />
-                    <CardBody>
-                        <CardTitle><h4>{selectedDish.name}</h4></CardTitle>
-                        <CardText>{selectedDish.description}</CardText>
-                    </CardBody>
-                </Card>
-            </div>
-            </>
-        )
-    }
-    else {
-        return <div></div>
-    }
-}
-
-function RenderComments({comments}) {
-    if (comments != undefined) {
-        
-    const commentsList = comments.map( (comment)=>{
-    return(
-        <>
-        <p key={comment.id}>{comment.comment}</p>
-        <span>--{comment.author} , ini{comment.date}</span>
-        </>
-        )
-    });
-
-        return (
-            <div className="col-12 col-md-5 m-1">
-                <h4>Comments</h4>
-                <div className="list-unstyled"> 
-                    {commentsList}
-                </div>
-                <CommentForm/>
-
-            </div>
-        )
-    }
-    else {
-        return <div><CommentForm/></div>
-    }
-}
 
 const required = (val) => val&&val.length;
 const minLength = (len) => (val = 0) => (val) && (val.length >= len)
@@ -75,10 +26,11 @@ class CommentForm extends React.Component{
         })
     }
     
-    handleNewComment(val){
+    handleNewComment(values){
 
         // inputs=JSON.stringify(val)
-        console.log(val)
+        console.log(values)
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
         this.toggleModal()
     }
     render(){
@@ -148,7 +100,56 @@ class CommentForm extends React.Component{
     }
 }
 
-function DishDetail({dish, comments}){
+function renderDish(selectedDish) {
+        
+    if (selectedDish != undefined) {
+        return (
+            <>
+            <div className="col-12 col-md-5 m-1">
+                <Card >
+                    <CardImg src={selectedDish.image} alt={selectedDish.name} />
+                    <CardBody>
+                        <CardTitle><h4>{selectedDish.name}</h4></CardTitle>
+                        <CardText>{selectedDish.description}</CardText>
+                    </CardBody>
+                </Card>
+            </div>
+            </>
+        )
+    }
+    else {
+        return <div></div>
+    }
+}
+
+function RenderComments({comments, addComment , dishId}) {
+    if (comments != undefined) {
+        
+    const commentsList = comments.map( (comment)=>{
+    return(
+        <>
+        <p key={comment.id}>{comment.comment}</p>
+        <span>--{comment.author} , ini{comment.date}</span>
+        </>
+        )
+    });
+
+        return (
+            <div className="col-12 col-md-5 m-1">
+                <h4>Comments</h4>
+                <div className="list-unstyled"> 
+                    {commentsList}
+                </div>
+            <CommentForm addComment={addComment} dishId={dishId}/>
+            </div>
+        )
+    }
+    else {
+        return <div><CommentForm addComment={addComment} dishId={dishId} /></div>
+    }
+}
+
+function DishDetail({dish, comments, addComment}){
     return (
         <div className="container">
             <div className="row">
@@ -166,7 +167,10 @@ function DishDetail({dish, comments}){
                     {/* Call as a function */}
                     {renderDish(dish)}
                     {/* Call as a component */}
-                    <RenderComments comments = {comments} />
+                    <RenderComments comments = {comments} 
+                        addComment={addComment}
+                        dishId={dish.id}
+                    />
                 </div>
             </div>
         </div>
