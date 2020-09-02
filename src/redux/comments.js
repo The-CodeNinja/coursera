@@ -8,7 +8,7 @@ export const Comments = (state = COMMENTS, action) => {
             var comment = action.payload;
             comment.id = state.length;
             comment.date= new Date().toISOString
-            // add state change without mutating it. 
+            // add state change without mutating it.
             return state.concat(comment)
         
         default: 

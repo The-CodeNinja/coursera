@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Card, CardBody, CardText, CardImg, CardTitle, BreadcrumbItem, Breadcrumb, Row, Modal,ModalBody,ModalHeader, Label, Button } from 'reactstrap'
 import {Link} from 'react-router-dom'
 import {LocalForm, Control, Errors} from 'react-redux-form'
-
+import LoadingComponent from './loadingComponent'
 
 const required = (val) => val&&val.length;
 const minLength = (len) => (val = 0) => (val) && (val.length >= len)
@@ -125,14 +125,14 @@ function renderDish(selectedDish) {
 function RenderComments({comments, addComment , dishId}) {
     if (comments != undefined) {
         
-    const commentsList = comments.map( (comment)=>{
-    return(
-        <>
-        <p key={comment.id}>{comment.comment}</p>
-        <span>--{comment.author} , ini{comment.date}</span>
-        </>
-        )
-    });
+        const commentsList = comments.map( (comment)=>{
+            return(
+                <>
+                <p key={comment.id}>{comment.comment}</p>
+                <span>--{comment.author} , ini{comment.date}</span>
+                </>
+            )
+        });
 
         return (
             <div className="col-12 col-md-5 m-1">
@@ -140,7 +140,7 @@ function RenderComments({comments, addComment , dishId}) {
                 <div className="list-unstyled"> 
                     {commentsList}
                 </div>
-            <CommentForm addComment={addComment} dishId={dishId}/>
+                <CommentForm addComment={addComment} dishId={dishId}/>
             </div>
         )
     }
@@ -149,7 +149,26 @@ function RenderComments({comments, addComment , dishId}) {
     }
 }
 
-function DishDetail({dish, comments, addComment}){
+function DishDetail({dish, comments, addComment,dishLoading, errMsg}){
+    
+    if(dishLoading){
+        return(
+            <div className="container">
+                <div className="row">
+                    <LoadingComponent/>
+                </div>
+            </div>
+        )
+    }
+    else if(errMsg){
+        return(
+            <div className="container">
+                <div className="row">
+                    <h4>{errMsg}</h4>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className="container">
             <div className="row">
@@ -167,9 +186,10 @@ function DishDetail({dish, comments, addComment}){
                     {/* Call as a function */}
                     {renderDish(dish)}
                     {/* Call as a component */}
-                    <RenderComments comments = {comments} 
-                        addComment={addComment}
-                        dishId={dish.id}
+                    <RenderComments 
+                        comments = {comments /* list of comments for given dish */ } 
+                        addComment = {addComment /*pointer to redux reducer function for adding comment */ }
+                        dishId = {dish.id}
                     />
                 </div>
             </div>
