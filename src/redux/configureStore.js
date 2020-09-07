@@ -3,6 +3,10 @@ import {Dishes} from './dishes.js'
 import {Comments} from './comments.js'
 import {Leaders} from './leaders.js'
 import {Promotions} from './promotions.js'
+import {CreateForms, createForms} from 'react-redux-form'
+import {InitialFeedback} from './forms'
+// Create forms creates a reducer function that connects the state to store 
+
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 
@@ -15,7 +19,10 @@ export const ConfigureStore = ()=>{
             dishes: Dishes,
             comments:Comments,
             leaders:Leaders,
-            promotions: Promotions
+            promotions: Promotions,
+            ...createForms({
+                feedback: InitialFeedback
+            })
         }), 
         // create store takes 2nd param as enhancer
         applyMiddleware(thunk, logger) // by doing this both thunk and logger become available throughout our app

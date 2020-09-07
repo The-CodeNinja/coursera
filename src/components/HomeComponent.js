@@ -1,6 +1,8 @@
 import React from 'react'
 import {Card, CardBody, CardImg, CardTitle, CardSubtitle, CardText} from 'reactstrap'
 import LoadingComponent from './loadingComponent'
+import {baseUrl} from '../redux/baseUrl'
+
 
 function RenderCard({item, isLoading, errMsg}) {
     console.log("item",item)
@@ -15,7 +17,7 @@ function RenderCard({item, isLoading, errMsg}) {
     else{
         return (
             <Card>
-                <CardImg src={item.image} alt={item.name} />
+                <CardImg src={baseUrl + item.image} alt={item.name} />
                 <CardBody>
                     <CardTitle>
                         {item.name}
@@ -46,13 +48,13 @@ export default function HomeComponent(props) {
                 <div className="col-12 col-md m-1" >
                     <RenderCard 
                         item={props.leader}
-                        isLoading={props.isLoading} 
+                        isLoading={props.Loading} 
                         errMsg={props.errMsg}/>
                 </div>
                 <div className="col-12 col-md m-1" >
                     <RenderCard 
                         item={props.promotion}
-                        isLoading={props.isLoading} 
+                        isLoading={props.promosLoading} 
                         errMsg={props.errMsg}/>
                 </div>
                 

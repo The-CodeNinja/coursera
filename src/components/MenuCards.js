@@ -2,12 +2,13 @@ import React from 'react'
 import { Card, CardImg, CardImgOverlay, CardTitle, Breadcrumb, BreadcrumbItem  } from 'reactstrap'
 import {Link} from 'react-router-dom'
 import LoadingComponent from './loadingComponent'
+import {baseUrl} from '../redux/baseUrl'
 
 const MenuCard = ({dish, onClick})=> {
     return (
         <Card>
             <Link to={`/menu/${dish.id}`}>
-                <CardImg src={dish.image} alt={dish.name} />
+                <CardImg src={baseUrl + dish.image} alt={dish.name} />
                 <CardImgOverlay body className="ml-5">
                     <CardTitle>{dish.name}</CardTitle>                           
                 </CardImgOverlay>
